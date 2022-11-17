@@ -12,7 +12,7 @@
     "permissions": ["clipboardWrite"],
     "content_scripts": [
         {
-          "js": ["scripts/content.js"],
+          "js": ["content.js"],
           "matches": [
             "https://jira.tools.telstra.com/*"
           ]

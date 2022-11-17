@@ -1,4 +1,5 @@
-const slugify = (text) => {
+const slugify = (text: string | null) => {
+    if (!text) return '';
     const substrings = text.toString().split('-');
     const prefix = substrings.shift();
     const remainder = substrings.join('-');
@@ -12,28 +13,27 @@ const slugify = (text) => {
 }
 
 setTimeout(() => {
-    const jiraIssues = document.querySelectorAll('[data-issue-key]');
+    const jiraIssues = document.querySelectorAll<HTMLDivElement>('[data-issue-key]');
 
     jiraIssues.forEach(issue => {
         const issueDescription = issue.ariaLabel;
-        const buttonContainer = issue.querySelector('.ghx-days');
-        const button = document.createElement("a");
-        button.class = 'aui-button aui-button-link';
+        const buttonContainer = issue.querySelector('.ghx-days') as HTMLElement;
+        const button = document.createElement('a') as HTMLAnchorElement;
+        button.classList.add('aui-button', 'aui-button-link');
         button.innerText = 'Copy Git Branch Name';
         if (buttonContainer) {
-            buttonContainer.parentNode.insertBefore(button, buttonContainer);
-            function handleButtonClick(event) {
+            buttonContainer.parentNode?.insertBefore(button, buttonContainer);
+            function handleButtonClick(event: Event) {
                 event.stopPropagation();
                 event.preventDefault();
-                const copyText = slugify(issueDescription);
-                let textArea = document.createElement("textarea");
+                const copyText: string = slugify(issueDescription);
+                const textArea: HTMLTextAreaElement = document.createElement("textarea");
                 textArea.value = copyText;
                 document.body.appendChild(textArea);
                 textArea.focus();
                 textArea.select();
                 document.execCommand('copy');
                 textArea.remove();
-                // navigator.clipboard.writeText(copyText);
                 alert(`${copyText}\n\nCopied to Clipboard!`)
             }
             button.addEventListener('click', handleButtonClick, false);
