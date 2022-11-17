@@ -13,11 +13,12 @@ const slugify = (text: string | null) => {
 }
 
 setTimeout(() => {
-    const jiraIssues = document.querySelectorAll<HTMLDivElement>('[data-issue-key]');
+    const jiraIssues = document.querySelectorAll<HTMLDivElement>('[data-issue-key][role]');
 
     jiraIssues.forEach(issue => {
         const issueDescription = issue.ariaLabel;
         const buttonContainer = issue.querySelector('.ghx-days') as HTMLElement;
+        const ticketType = issue.querySelector('.ghx-type') as HTMLElement;
         const button = document.createElement('a') as HTMLAnchorElement;
         button.classList.add('aui-button', 'aui-button-link');
         button.innerText = 'Copy Git Branch Name';
@@ -26,7 +27,12 @@ setTimeout(() => {
             function handleButtonClick(event: Event) {
                 event.stopPropagation();
                 event.preventDefault();
-                const copyText: string = slugify(issueDescription);
+                let copyText: string = slugify(issueDescription);
+                let prefix = 'feature/';
+                if (ticketType) {
+                    if (ticketType.title === 'Bug') prefix = 'bugfix/';
+                }
+                copyText = prefix + copyText;
                 const textArea: HTMLTextAreaElement = document.createElement("textarea");
                 textArea.value = copyText;
                 document.body.appendChild(textArea);
