@@ -13,6 +13,7 @@
     "content_scripts": [
         {
           "js": ["content.js"],
+          "css": ["content.css"],
           "matches": [
             "https://jira.tools.telstra.com/*"
           ]
